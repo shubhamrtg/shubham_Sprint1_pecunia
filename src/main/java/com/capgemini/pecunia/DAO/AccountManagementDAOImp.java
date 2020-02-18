@@ -85,31 +85,37 @@ public class AccountManagementDAOImp implements AccountManagementDAO
 		return String.valueOf(customerID);	
 	}
 	
-	public String addAccount(Accounts account)
-	{
-		Map<String,Accounts> newAccountList=AccountsRepository.getListOfAccounts();
-		newAccountList.put(account.getAccountID(), account);
-		AccountsRepository.setListOfAccounts(newAccountList);
-		if(AccountsRepository.getListOfAccounts().containsKey(account.getAccountID()))
-			return account.getAccountID();
-		else
-			return "Account not created";
-	}
-	
 	public String calculateAccountID(Accounts account)
 	{
 		String accountID = null;
-		if(account.getBreanchID().equals(Branch1.branchID))
+		if(account.getAccountID()==null)
 		{
-			int id=++Branch1.accounts;
-			accountID=String.format("%04d", id);
+			if(account.getBreanchID().equals(Branch1.branchID))
+			{
+				int id=++Branch1.accounts;
+				accountID=String.format("%04d", id);
+			}
+			if(account.getBreanchID().equals(Branch2.branchID))
+			{
+				int id=++Branch2.accounts;
+				accountID=String.format("%04d", id);
+			}
+			accountID=account.getBreanchID()+account.getCustomerID()+accountID;
 		}
-		if(account.getBreanchID().equals(Branch2.branchID))
+		return accountID;	
+	}
+	
+	public String addAccount(Accounts account)
+	{
+		if(account.getAccountID()!=null)
 		{
-			int id=++Branch2.accounts;
-			accountID=String.format("%04d", id);
+			Map<String,Accounts> newAccountList=AccountsRepository.getListOfAccounts();
+			newAccountList.put(account.getAccountID(), account);
+			AccountsRepository.setListOfAccounts(newAccountList);
+			if(AccountsRepository.getListOfAccounts().containsKey(account.getAccountID()))
+				return account.getAccountID();
 		}
-		return account.getBreanchID()+account.getCustomerID()+accountID;	
+		return "Account not created";
 	}
 	
 	public boolean showAccountDetails(Accounts account)
@@ -126,12 +132,9 @@ public class AccountManagementDAOImp implements AccountManagementDAO
 		return false;
 	}
 	
-	public void displayAccounts()
+	public Map<String,Accounts> displayAccounts()
 	{
-		for(String key:AccountsRepository.getListOfAccounts().keySet())
-		{
-			System.out.println(AccountsRepository.getListOfAccounts().get(key));
-		}
+		return AccountsRepository.getListOfAccounts();
 	}
 	
 

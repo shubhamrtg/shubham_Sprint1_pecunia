@@ -60,7 +60,7 @@ public class Addresses
 	@Override
 	public String toString() 
 	{
-		return "Addresses [addressline1=" + addressline1 + ", addressline2=" + addressline2 + ", city=" + city
-				+ ", state=" + state + ", country=" + country + ", zipCode=" + zipCode + "]";
+		return " addressline1=" + addressline1 + ", addressline2=" + addressline2 + ", city=" + city
+				+ ", state=" + state + ", country=" + country + ", zipCode=" + zipCode;
 	}	
 }

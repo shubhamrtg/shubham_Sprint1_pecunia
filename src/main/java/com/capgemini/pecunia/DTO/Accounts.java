@@ -86,9 +86,8 @@ public class Accounts
 	@Override
 	public String toString() 
 	{
-		return "Accounts [customerID=" + customerID + ", customer=" + customer + ", balance=" + balance
-				+ ", interestRate=" + interestRate + ", type=" + type + ", breanchID=" + breanchID + ", accountID="
-				+ accountID + "]";
+		return "Accounts [ accountID= "+ accountID + ", " + customer + ", balance=" + balance
+				+ ", interestRate=" + interestRate + ", type=" + type + ", breanchID=" + breanchID + ", customerID=" + customerID +  "]";
 	}	
 	
 	

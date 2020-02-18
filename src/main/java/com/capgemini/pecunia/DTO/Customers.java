@@ -77,7 +77,7 @@ public class Customers
 	@Override
 	public String toString() {
 		return " customerName=" + customerName + ", contact=" + contact + ", aadhar=" + aadhar + ", pan="
-				+ pan + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender + ", address=" + address;
+				+ pan + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender + ", " + address;
 	}
 	
 	

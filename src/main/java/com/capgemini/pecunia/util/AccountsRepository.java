@@ -13,6 +13,8 @@ public class AccountsRepository
 	public AccountsRepository()
 	{
 		new CustomersRepository();
+		new Branch1();
+		new Branch2();
 		
 		Accounts account=new Accounts();
 		account.setCustomerID("1");
