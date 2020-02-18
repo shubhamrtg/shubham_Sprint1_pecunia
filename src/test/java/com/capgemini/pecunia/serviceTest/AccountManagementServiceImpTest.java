@@ -38,6 +38,7 @@ public class AccountManagementServiceImpTest
 		customerBean=new Customers();
   		customerBean.setCustomerName("test");
   		customerBean.setContact(1234567890);
+  		customerBean.setGender("male");
   		customerBean.setAadhar(214445670987l);
   		customerBean.setPan("tests1234t");
   		addressBean.setCity("testCity");
@@ -62,6 +63,14 @@ public class AccountManagementServiceImpTest
 			      });
 		assertEquals("Invalid customer name", exception.getMessage());
 		customerBean.setCustomerName("test");
+		
+		exception = assertThrows(
+			      Exception.class,() -> {
+			    	  	customerBean.setGender("other");
+				    	obj.validation(accountBean);   	  
+			      });
+		assertEquals("Invalid gender", exception.getMessage());
+		customerBean.setGender("male");
 		
 		exception = assertThrows(
 			      Exception.class,() -> {

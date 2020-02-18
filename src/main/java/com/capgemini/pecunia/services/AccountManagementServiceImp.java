@@ -20,6 +20,8 @@ public class AccountManagementServiceImp implements AccountManagementService
 		//validation of all the input given by user
 		if(!account.getCustomer().getCustomerName().matches("^[a-zA-Z]*$"))
 			throw new InvalidCustomerDetailException("Invalid customer name");
+		if(!account.getCustomer().getGender().equalsIgnoreCase("male") && !account.getCustomer().getGender().equalsIgnoreCase("female"))
+			throw new InvalidCustomerDetailException("Invalid gender");
 		if(String.valueOf(account.getCustomer().getContact()).length()!=10)
 			throw new InvalidCustomerDetailException("Invalid Contact number");
 		if(String.valueOf(account.getCustomer().getAadhar()).length()!=12)
