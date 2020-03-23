@@ -1,5 +1,7 @@
 package com.capgemini.pecunia.DTO;
 
+import com.capgemini.pecunia.exceptions.InvalidAddressException;
+
 public class Addresses 
 {
 	private String addressline1;
@@ -29,32 +31,40 @@ public class Addresses
 	{
 		return city;
 	}
-	public void setCity(String city) 
+	public void setCity(String city) throws InvalidAddressException 
 	{
+		if(city.matches("^[a-zA-Z]*$"))
+			throw new InvalidAddressException("Invalid city name");
 		this.city = city;
 	}
 	public String getState() 
 	{
 		return state;
 	}
-	public void setState(String state)
+	public void setState(String state) throws InvalidAddressException
 	{
+		if(state.matches("^[a-zA-Z]*$"))
+			throw new InvalidAddressException("Invalid state name");
 		this.state = state;
 	}
 	public String getCountry()
 	{
 		return country;
 	}
-	public void setCountry(String country) 
+	public void setCountry(String country) throws InvalidAddressException 
 	{
+		if(country.matches("^[a-zA-Z]*$"))
+			throw new InvalidAddressException("Invalid country name");
 		this.country = country;
 	}
 	public String getZipCode() 
 	{
 		return zipCode;
 	}
-	public void setZipCode(String zipCode) 
+	public void setZipCode(String zipCode) throws InvalidAddressException 
 	{
+		if(zipCode.matches("[0-9]+") || zipCode.length()!=6)
+			throw new InvalidAddressException("Invalid zipcode");
 		this.zipCode = zipCode;
 	}
 	@Override

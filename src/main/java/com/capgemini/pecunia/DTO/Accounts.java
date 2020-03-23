@@ -1,5 +1,7 @@
 package com.capgemini.pecunia.DTO;
 
+import com.capgemini.pecunia.exceptions.InvalidAccountDetailException;
+
 public class Accounts
 {
 	private String customerID;
@@ -7,7 +9,7 @@ public class Accounts
 	private double balance;
 	private double interestRate;
 	private String type;
-	private String breanchID;
+	private String branchID;
 	private String accountID;
 	private String status;
 	
@@ -49,20 +51,24 @@ public class Accounts
 	{
 		this.type = type;
 	}
-	public String getBreanchID() 
+	public String getBranchID() 
 	{
-		return breanchID;
+		return branchID;
 	}
-	public void setBreanchID(String breanchID) 
+	public void setBranchID(String branchID) throws InvalidAccountDetailException 
 	{
-		this.breanchID = breanchID;
+		if(branchID.matches("[0-9]+") || branchID.length()!=4)
+			throw new InvalidAccountDetailException("Invalid branch id");
+		this.branchID = branchID;
 	}
 	public String getAccountID() 
 	{
 		return accountID;
 	}
-	public void setAccountID(String accountID) 
+	public void setAccountID(String accountID) throws InvalidAccountDetailException 
 	{
+		if(accountID.matches("[0-9]+") || accountID.length()!=12)
+			throw new InvalidAccountDetailException("Invalid account id");
 		this.accountID = accountID;
 	}
 
@@ -87,7 +93,7 @@ public class Accounts
 	public String toString() 
 	{
 		return "Accounts [ accountID= "+ accountID + ", " + customer + ", balance=" + balance
-				+ ", interestRate=" + interestRate + ", type=" + type + ", breanchID=" + breanchID + ", customerID=" + customerID +  "]";
+				+ ", interestRate=" + interestRate + ", type=" + type + ", breanchID=" + branchID + ", customerID=" + customerID +  "]";
 	}	
 	
 	

@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.capgemini.pecunia.DTO.Addresses;
+import com.capgemini.pecunia.exceptions.InvalidAddressException;
 
 public class AddressesRepository
 {
 	private static List<Addresses> listOfAddresses=new ArrayList<Addresses>();
 
-	public AddressesRepository()
+	public AddressesRepository() throws InvalidAddressException
 	{
 		Addresses address=new Addresses();
 		address.setAddressline1("hno.-2j/5");

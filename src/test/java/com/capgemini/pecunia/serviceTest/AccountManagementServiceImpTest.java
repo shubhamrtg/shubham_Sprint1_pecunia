@@ -30,7 +30,7 @@ public class AccountManagementServiceImpTest
 	
 	@BeforeAll
 	@Test
-	public static void AccountManagementServiceImpObjectTest()
+	public static void AccountManagementServiceImpObjectTest() throws InvalidCustomerDetailException, InvalidAddressException, InvalidAccountDetailException
 	{
 		obj=new AccountManagementServiceImp();
 		accountBean=new Accounts();
@@ -45,7 +45,7 @@ public class AccountManagementServiceImpTest
   		addressBean.setState("testState");
   		addressBean.setCountry("testCountry");
   		addressBean.setZipCode("123456");
-  		accountBean.setBreanchID("1234");
+  		accountBean.setBranchID("1234");
 		accountBean.setType("current");
 		accountBean.setStatus("open");
 		accountBean.setAccountID("123401000044");
@@ -162,19 +162,19 @@ public class AccountManagementServiceImpTest
 		
 		exception = assertThrows(
 			      Exception.class,() -> {
-			    	  	accountBean.setBreanchID("123s");
+			    	  	accountBean.setBranchID("123s");
 				    	obj.validation(accountBean);   	  
 			      });
 		assertEquals("Invalid branch id", exception.getMessage());
-		accountBean.setBreanchID("1234");
+		accountBean.setBranchID("1234");
 		
 		exception = assertThrows(
 			      Exception.class,() -> {
-			    	  	accountBean.setBreanchID("1234567");
+			    	  	accountBean.setBranchID("1234567");
 				    	obj.validation(accountBean);   	  
 			      });
 		assertEquals("Invalid branch id", exception.getMessage());
-		accountBean.setBreanchID("1234");
+		accountBean.setBranchID("1234");
 		
 	}
 	
@@ -190,7 +190,7 @@ public class AccountManagementServiceImpTest
 		String accounts=String.format("%04d", id);
 		assertEquals("Account created : 1234"+customerID+""+accounts,obj.addAccount(accountBean));
 		
-		accountBean.setBreanchID("5678");
+		accountBean.setBranchID("5678");
 		id=Branch2.customerID+1;
 		customerID=String.format("%04d", id);
 		id=Branch2.accounts+1;
@@ -362,7 +362,7 @@ public class AccountManagementServiceImpTest
 	}
 	
 	@Test
-	public void deleteAccountTest()
+	public void deleteAccountTest() throws InvalidAccountDetailException
 	{
 		int id=Branch1.customerID;
 		String customerID=String.format("%04d", id);

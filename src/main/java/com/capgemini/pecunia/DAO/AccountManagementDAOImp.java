@@ -8,13 +8,16 @@ import com.capgemini.pecunia.DTO.Addresses;
 import com.capgemini.pecunia.DTO.Branch1;
 import com.capgemini.pecunia.DTO.Branch2;
 import com.capgemini.pecunia.DTO.Customers;
+import com.capgemini.pecunia.exceptions.InvalidAccountDetailException;
+import com.capgemini.pecunia.exceptions.InvalidAddressException;
+import com.capgemini.pecunia.exceptions.InvalidCustomerDetailException;
 import com.capgemini.pecunia.util.AccountsRepository;
 import com.capgemini.pecunia.util.AddressesRepository;
 import com.capgemini.pecunia.util.CustomersRepository;
 
 public class AccountManagementDAOImp implements AccountManagementDAO
 {
-	public AccountManagementDAOImp()
+	public AccountManagementDAOImp() throws InvalidAccountDetailException, InvalidAddressException, InvalidCustomerDetailException
 	{
 		new AccountsRepository();
 	}
@@ -22,14 +25,17 @@ public class AccountManagementDAOImp implements AccountManagementDAO
 	public boolean deleteAccount(Accounts account)
 	{
 		Map<String,Accounts> newAccountsList=AccountsRepository.getListOfAccounts();
-		if(newAccountsList.get(account.getAccountID()).getStatus().equalsIgnoreCase("Open"))
+		if(newAccountsList.containsKey(account.getAccountID()))
 		{
-			newAccountsList.get(account.getAccountID()).setStatus("Close");
-			return true;
+			if(newAccountsList.get(account.getAccountID()).getStatus().equalsIgnoreCase("Open"))
+			{
+				newAccountsList.get(account.getAccountID()).setStatus("Close");
+				return true;
+			}
 		}
 		return false;
 	}
-	public boolean updateCustomerName(Accounts account)
+	public boolean updateCustomerName(Accounts account) throws InvalidCustomerDetailException
 	{
 		Map<String,Accounts> newAccountsList=AccountsRepository.getListOfAccounts();
 		if(newAccountsList.containsKey(account.getAccountID()))
@@ -40,7 +46,7 @@ public class AccountManagementDAOImp implements AccountManagementDAO
 		return false;
 		
 	}
-	public boolean updateCustomerContact(Accounts account)
+	public boolean updateCustomerContact(Accounts account) throws InvalidCustomerDetailException
 	{
 		Map<String,Accounts> newAccountsList=AccountsRepository.getListOfAccounts();
 		if(newAccountsList.containsKey(account.getAccountID()))
@@ -72,12 +78,12 @@ public class AccountManagementDAOImp implements AccountManagementDAO
 		AddressesRepository.setListOfAddresses(newAddressesList);
 		
 		String customerID = null;
-		if(account.getBreanchID().equals(Branch1.branchID))
+		if(account.getBranchID().equals(Branch1.branchID))
 		{
 			int id=++Branch1.customerID;
 			customerID=String.format("%04d", id);
 		}
-		if(account.getBreanchID().equals(Branch2.branchID))
+		if(account.getBranchID().equals(Branch2.branchID))
 		{
 			int id=++Branch2.customerID;
 			customerID=String.format("%04d", id);
@@ -90,17 +96,17 @@ public class AccountManagementDAOImp implements AccountManagementDAO
 		String accountID = null;
 		if(account.getAccountID()==null)
 		{
-			if(account.getBreanchID().equals(Branch1.branchID))
+			if(account.getBranchID().equals(Branch1.branchID))
 			{
 				int id=++Branch1.accounts;
 				accountID=String.format("%04d", id);
 			}
-			if(account.getBreanchID().equals(Branch2.branchID))
+			if(account.getBranchID().equals(Branch2.branchID))
 			{
 				int id=++Branch2.accounts;
 				accountID=String.format("%04d", id);
 			}
-			accountID=account.getBreanchID()+account.getCustomerID()+accountID;
+			accountID=account.getBranchID()+account.getCustomerID()+accountID;
 		}
 		return accountID;	
 	}

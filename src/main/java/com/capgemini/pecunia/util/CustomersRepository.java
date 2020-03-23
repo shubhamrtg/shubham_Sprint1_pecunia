@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.capgemini.pecunia.DTO.Customers;
+import com.capgemini.pecunia.exceptions.InvalidAddressException;
+import com.capgemini.pecunia.exceptions.InvalidCustomerDetailException;
 
 public class CustomersRepository 
 {
 	private static List<Customers> listOfCustomers=new ArrayList<Customers>();
 	
-	public CustomersRepository()
+	public CustomersRepository() throws InvalidAddressException, InvalidCustomerDetailException
 	{
 		DateTimeFormatter myFormat =DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		new AddressesRepository();

@@ -3,6 +3,7 @@ package com.capgemini.pecunia.UI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.capgemini.pecunia.DTO.Accounts;
@@ -11,15 +12,16 @@ import com.capgemini.pecunia.DTO.Customers;
 import com.capgemini.pecunia.exceptions.InvalidAccountDetailException;
 import com.capgemini.pecunia.exceptions.InvalidAddressException;
 import com.capgemini.pecunia.exceptions.InvalidCustomerDetailException;
+import com.capgemini.pecunia.services.AccountManagementService;
 import com.capgemini.pecunia.services.AccountManagementServiceImp;
 import com.capgemini.pecunia.util.AccountsRepository;
 
 public class PecuniaUI 
 {
-	public static void main(String[] args) 
+	public static void main(String[] args) throws InvalidAccountDetailException, InvalidAddressException, InvalidCustomerDetailException 
 	{
 		//service object to access functionalities of AccountManagementService
-		AccountManagementServiceImp serviceObj=new AccountManagementServiceImp();
+		AccountManagementService serviceObj=new AccountManagementServiceImp();
 		
 		//Declaring bean classes for further use
 		Accounts accountBean;
@@ -33,8 +35,22 @@ public class PecuniaUI
 		DateTimeFormatter myFormat =DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		
 		//menu driven user interface
-		System.out.println("Enter 1 to add Account \nEnter 2 to update \nEnter 3 to delete \nEnter 4 to display all accounts \nEnter 0 to exit");
-		int ch=sc.nextInt();
+		
+		int ch=-1;
+		do
+		{
+			System.out.println("Enter 1 to add Account \nEnter 2 to update \nEnter 3 to delete \nEnter 4 to display all accounts \nEnter 0 to exit");
+			try 
+			{
+				ch=sc.nextInt();
+			}
+
+			catch(InputMismatchException exception)
+			{
+				System.out.println("Enter only number");
+				sc.next();
+			}
+		}while(ch<0);
 		
 		while(ch!=0)
 		{
@@ -50,34 +66,171 @@ public class PecuniaUI
 				
 				//taking input from user
 				System.out.println("Enter Customer and account details");
-				customerBean.setCustomerName(sc.next());
-				customerBean.setContact(sc.nextLong());
-				customerBean.setDateOfBirth(LocalDate.parse(sc.next(), myFormat));
-				customerBean.setAadhar(sc.nextLong());
-				customerBean.setGender(sc.next());
-				customerBean.setPan(sc.next());
-				addressBean.setAddressline1(sc.next());
-				addressBean.setAddressline2(sc.next());
-				addressBean.setCity(sc.next());
-				addressBean.setState(sc.next());
-				addressBean.setCountry(sc.next());
-				addressBean.setZipCode(sc.next());
-				customerBean.setAddress(addressBean);
-				accountBean.setCustomer(customerBean);
-				accountBean.setBalance(sc.nextDouble());
-				accountBean.setBreanchID(sc.next());
-				accountBean.setInterestRate(sc.nextDouble());
-				accountBean.setType(sc.next());
-				accountBean.setStatus(sc.next());
-				
-				try
+				while(true)
 				{
-					//calling add account function from service package
-					System.out.println(serviceObj.addAccount(accountBean));
-				}
-				catch(InvalidAddressException | DateTimeParseException | InvalidAccountDetailException |InvalidCustomerDetailException e)
-				{
-					System.out.println(e.getMessage());
+					System.out.println("Enter name");
+					try 
+					{
+						customerBean.setCustomerName(sc.next()+sc.nextLine());
+					} 
+					catch (InvalidCustomerDetailException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					while(true)
+					{
+						System.out.println("Enter contact number");
+						try
+						{
+							customerBean.setContact(sc.nextLong());
+							break;
+						}
+						catch(InputMismatchException | InvalidCustomerDetailException e)
+						{
+							System.out.println("invalid contact number : enter 10 digit numeric value");
+							sc.next();
+						}
+					}
+						
+					while(true)
+					{
+						System.out.println("Enter DOB");
+						try
+						{
+							customerBean.setDateOfBirth(LocalDate.parse(sc.next(), myFormat));
+							break;
+						}
+						catch(DateTimeParseException e)
+						{
+							System.out.println("invalid Date : enter date in dd-mm-yyyy format");
+							sc.next();
+						}
+					}
+					while(true)
+					{
+						System.out.println("Enter aadhar number");
+						try
+						{
+							customerBean.setAadhar(sc.nextLong());
+							break;
+						}
+						catch(InputMismatchException | InvalidCustomerDetailException e)
+						{
+							System.out.println("invalid aadhar number : enter 12 digit numeric value");
+							sc.next();
+						}
+					}
+					System.out.println("Enter gender");
+					try 
+					{
+						customerBean.setGender(sc.next());
+					} 
+					catch (InvalidCustomerDetailException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					System.out.println("Enter Pan code");
+					try 
+					{
+						customerBean.setPan(sc.next());
+					}
+					catch (InvalidCustomerDetailException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					System.out.println("Enter address line 1");
+					addressBean.setAddressline1(sc.next()+sc.nextLine());
+					System.out.println("Enter address line 2");
+					addressBean.setAddressline2(sc.next()+sc.nextLine());
+					System.out.println("Enter city");
+					try 
+					{
+						addressBean.setCity(sc.next());
+					} 
+					catch (InvalidAddressException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					System.out.println("Enter state");
+					try 
+					{
+						addressBean.setState(sc.next());
+					} 
+					catch (InvalidAddressException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					System.out.println("Enter country");
+					try 
+					{
+						addressBean.setCountry(sc.next());
+					} 
+					catch (InvalidAddressException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					System.out.println("Enter zip code");
+					try 
+					{
+						addressBean.setZipCode(sc.next());
+					} 
+					catch (InvalidAddressException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					customerBean.setAddress(addressBean);
+					accountBean.setCustomer(customerBean);
+					while(true)
+					{
+						System.out.println("Enter account balance");
+						try
+						{
+							accountBean.setBalance(sc.nextDouble());
+							break;
+						}
+						catch(InputMismatchException e)
+						{
+							System.out.println("invalid balance : enter numeric value");
+							sc.next();
+						}
+					}
+					System.out.println("Enter branch id");
+					try 
+					{
+						accountBean.setBranchID(sc.next());
+					}
+					catch (InvalidAccountDetailException e1)
+					{
+						System.out.println(e1.getMessage());
+					}
+					while(true)
+					{
+						System.out.println("Enter interest rate");
+						try
+						{
+							accountBean.setInterestRate(sc.nextDouble());
+							break;
+						}
+						catch(InputMismatchException e)
+						{
+							System.out.println("invalid interest rate : enter numeric value");
+							sc.next();
+						}
+					}
+					System.out.println("Enter account type");
+					accountBean.setType(sc.next());
+					System.out.println("Enter account status");
+					accountBean.setStatus(sc.next());
+					try
+					{	
+						//calling add account function from service package
+						System.out.println(serviceObj.addAccount(accountBean));
+						break;
+					}
+					catch(InvalidAddressException | InvalidAccountDetailException |InvalidCustomerDetailException e)
+					{
+						System.out.println(e.getMessage());
+					}
 				}
 			break;
 				
@@ -102,9 +255,24 @@ public class PecuniaUI
 					
 					//taking account id and customer name as input from user
 					System.out.println("Enter account ID");
-					accountBean.setAccountID(sc.next());
+					try 
+					{
+						accountBean.setAccountID(sc.next());
+					} 
+					catch (InvalidAccountDetailException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
 					System.out.println("Enter new name");
-					customerBean.setCustomerName(sc.next());
+					sc.next();
+					try 
+					{
+						customerBean.setCustomerName(sc.next()+sc.nextLine());
+					} 
+					catch (InvalidCustomerDetailException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
 					accountBean.setCustomer(customerBean);
 					
 					try
@@ -133,14 +301,49 @@ public class PecuniaUI
 					
 					//taking account id and new address as input from user
 					System.out.println("Enter account ID");
-					accountBean.setAccountID(sc.next());
+					try 
+					{
+						accountBean.setAccountID(sc.next());
+					} 
+					catch (InvalidAccountDetailException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
 					System.out.println("Enter new address");
 					addressBean.setAddressline1(sc.next());
 					addressBean.setAddressline2(sc.next());
-					addressBean.setCity(sc.next());
-					addressBean.setState(sc.next());
-					addressBean.setCountry(sc.next());
-					addressBean.setZipCode(sc.next());
+					try 
+					{
+						addressBean.setCity(sc.next());
+					} 
+					catch (InvalidAddressException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					try 
+					{
+						addressBean.setState(sc.next());
+					} 
+					catch (InvalidAddressException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					try 
+					{
+						addressBean.setCountry(sc.next());
+					} 
+					catch (InvalidAddressException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					try 
+					{
+						addressBean.setZipCode(sc.next());
+					}
+					catch (InvalidAddressException e1)
+					{
+						System.out.println(e1.getMessage());
+					}
 					customerBean.setAddress(addressBean);
 					accountBean.setCustomer(customerBean);
 					
@@ -169,9 +372,28 @@ public class PecuniaUI
 					
 					//taking account id and new contact as input from user
 					System.out.println("Enter account ID");
-					accountBean.setAccountID(sc.next());
-					System.out.println("Enter new contact");
-					customerBean.setContact(sc.nextLong());
+					try 
+					{
+						accountBean.setAccountID(sc.next());
+					} 
+					catch (InvalidAccountDetailException e1) 
+					{
+						System.out.println(e1.getMessage());
+					}
+					while(true)
+					{
+						System.out.println("Enter contact number");
+						try
+						{
+							customerBean.setContact(sc.nextLong());
+							break;
+						}
+						catch(InputMismatchException | InvalidCustomerDetailException e)
+						{
+							System.out.println("invalid contact number : enter 10 digit numeric value");
+							sc.next();
+						}
+					}
 					accountBean.setCustomer(customerBean);
 					
 					try
@@ -198,7 +420,14 @@ public class PecuniaUI
 				
 				//taking account id as input from user
 				System.out.println("Enter account ID");
-				accountBean.setAccountID(sc.next());
+				try 
+				{
+					accountBean.setAccountID(sc.next());
+				} 
+				catch (InvalidAccountDetailException e1) 
+				{
+					System.out.println(e1.getMessage());
+				}
 				
 				try
 				{
@@ -241,8 +470,22 @@ public class PecuniaUI
 			default:
 				System.out.println("GO HOME.. YOU ARE DRUNK..!!");
 			}
-			System.out.println("Enter 1 to add Account \nEnter 2 to update \nEnter 3 to delete \nEnter 4 to diplay all accounts \nEnter 0 to exit");
-			ch=sc.nextInt();
+			
+			ch=-1;
+			do
+			{
+				System.out.println("Enter 1 to add Account \nEnter 2 to update \nEnter 3 to delete \nEnter 4 to display all accounts \nEnter 0 to exit");
+				try 
+				{
+					ch=sc.nextInt();
+				}
+
+				catch(InputMismatchException exception)
+				{
+					System.out.println("Enter only number");
+					sc.next();
+				}
+			}while(ch<0);
 		}
 		sc.close();
 	}

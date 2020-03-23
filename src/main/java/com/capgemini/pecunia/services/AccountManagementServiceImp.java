@@ -11,14 +11,14 @@ import com.capgemini.pecunia.exceptions.InvalidCustomerDetailException;
 public class AccountManagementServiceImp implements AccountManagementService
 {
 	AccountManagementDAOImp DAOObject;
-	public AccountManagementServiceImp()
+	public AccountManagementServiceImp() throws InvalidAccountDetailException, InvalidAddressException, InvalidCustomerDetailException
 	{
 		DAOObject=new AccountManagementDAOImp();
 	}
 	public void validation(Accounts account) throws InvalidAddressException, InvalidAccountDetailException, InvalidCustomerDetailException
 	{
 		//validation of all the input given by user
-		if(!account.getCustomer().getCustomerName().matches("^[a-zA-Z]*$"))
+		if(!account.getCustomer().getCustomerName().replaceAll(" ", "").matches("^[a-zA-Z]*$"))
 			throw new InvalidCustomerDetailException("Invalid customer name");
 		if(!account.getCustomer().getGender().equalsIgnoreCase("male") && !account.getCustomer().getGender().equalsIgnoreCase("female"))
 			throw new InvalidCustomerDetailException("Invalid gender");
@@ -40,7 +40,7 @@ public class AccountManagementServiceImp implements AccountManagementService
 			throw new InvalidAddressException("Invalid country name");
 		if(!account.getCustomer().getAddress().getZipCode().matches("[0-9]+") || account.getCustomer().getAddress().getZipCode().length()!=6)
 			throw new InvalidAddressException("Invalid zipcode");
-		if(!account.getBreanchID().matches("[0-9]+") || account.getBreanchID().length()!=4)
+		if(!account.getBranchID().matches("[0-9]+") || account.getBranchID().length()!=4)
 			throw new InvalidAccountDetailException("Invalid branch id");	
 
 	}

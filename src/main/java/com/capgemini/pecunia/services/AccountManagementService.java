@@ -1,5 +1,7 @@
 package com.capgemini.pecunia.services;
 
+import java.util.Map;
+
 import com.capgemini.pecunia.DTO.Accounts;
 import com.capgemini.pecunia.exceptions.InvalidAccountDetailException;
 import com.capgemini.pecunia.exceptions.InvalidAddressException;
@@ -14,5 +16,6 @@ public interface AccountManagementService
 	public String addAccount(Accounts account) throws InvalidAddressException, InvalidAccountDetailException, InvalidCustomerDetailException;
 	public String calculateAccountID(Accounts account);
 	public boolean showAccountDetails(Accounts account) throws InvalidAccountDetailException;
+	public Map<String, Accounts> displayAccounts();
 
 }

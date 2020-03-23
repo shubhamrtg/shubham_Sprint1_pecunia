@@ -27,7 +27,7 @@ public class AccountManagementDAOImpTest
 	
 	@BeforeAll
 	@Test
-	public static void AccountManagementServiceImpObjectTest()
+	public static void AccountManagementServiceImpObjectTest() throws InvalidCustomerDetailException, InvalidAddressException, InvalidAccountDetailException
 	{
 		obj=new AccountManagementDAOImp();
 		accountBean=new Accounts();
@@ -41,7 +41,7 @@ public class AccountManagementDAOImpTest
   		addressBean.setState("testState");
   		addressBean.setCountry("testCountry");
   		addressBean.setZipCode("123456");
-  		accountBean.setBreanchID("1234");
+  		accountBean.setBranchID("1234");
 		accountBean.setType("current");
 		accountBean.setStatus("open");
 		accountBean.setCustomerID("0000");
@@ -61,13 +61,13 @@ public class AccountManagementDAOImpTest
 	}
 	
 	@Test
-	public void calculateAccountIdTest()
+	public void calculateAccountIdTest() throws InvalidAccountDetailException
 	{
-		accountBean.setBreanchID("1234");
+		accountBean.setBranchID("1234");
 		accountBean.setAccountID(null);
 		assertEquals("123400000014",obj.calculateAccountID(accountBean));
 		
-		accountBean.setBreanchID("5678");
+		accountBean.setBranchID("5678");
 		accountBean.setAccountID(null);
 		assertEquals("567800000014",obj.calculateAccountID(accountBean));
 		
@@ -114,11 +114,11 @@ public class AccountManagementDAOImpTest
 	}
 	
 	@Test
-	public void addCustomerDetailsTest()
+	public void addCustomerDetailsTest() throws InvalidAccountDetailException
 	{
 		assertEquals("0070", obj.addCustomerDetails(accountBean));
 		
-		accountBean.setBreanchID("5678");
+		accountBean.setBranchID("5678");
 		assertEquals("0134", obj.addCustomerDetails(accountBean));
 	}
 	
@@ -129,7 +129,7 @@ public class AccountManagementDAOImpTest
 	}
 	
 	@Test
-	public void deleteAccountTest()
+	public void deleteAccountTest() throws InvalidAccountDetailException
 	{
 		accountBean.setAccountID("123400650009");
 		assertTrue(obj.deleteAccount(accountBean));
